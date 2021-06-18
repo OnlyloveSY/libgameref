@@ -2,11 +2,15 @@
 
 Head Only C ++ - based game server or client is an efficient table reading tool, he static reflection to the structure of the various fields
 
+- See the test case in (test) for details on how to use it
+
 - If you want to use it, just include the following files
 
 - `libref.hpp`
 
 - `table_ref.h`
+
+  
 
 # 2.API function docs
 
