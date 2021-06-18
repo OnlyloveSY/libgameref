@@ -66,7 +66,8 @@ bool Unmarshal(std::vector<StructType>& save);
 
 
 
-Export as  STL vector  data structure,and support for lambda to check data easily
+- Export as  STL vector  data structure,and support for lambda to check data easily
+
 
 ```c++
 bool Unmarshal(std::vector<StructType>& save, _Pr pr);

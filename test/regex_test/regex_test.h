@@ -7,6 +7,8 @@ TABLE_STRUCT_DEF_4(CharacterQualityFragment,"./test/CharacterQualityFragment.tab
 	int, DecomposeCount,"DecomposeCount",
 	int, ComposeCount,	"ComposeCount",
 	std::vector<int>, StarUseCount, "StarUseCount\\[[0-9]\\],pkg"
+	//std::set<int>, StarUseCount, "StarUseCount\\[[0-9]\\],pkg"
+	//std::unordered_set<int>, StarUseCount, "StarUseCount\\[[0-9]\\],pkg"
 	)
 
 
