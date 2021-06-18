@@ -3,7 +3,7 @@
 #include "../common.h"
 
 
-TABLE_STRUCT_DEF_39(Monster,"./Monster.txt",'\t',
+TABLE_STRUCT_DEF_39(Monster,"./test/NPC.txt",'\t',
 	int, id,					"id,key",
 	int, Type,					"Type",
 	int, position_type,			"position_type",

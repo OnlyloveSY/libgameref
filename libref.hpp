@@ -30,12 +30,28 @@
 #include <vector>
 #include <unordered_map>
 #include <map>
-#include <regex>
 #include <cstring>
 #include <fcntl.h>
 #include <assert.h>
 #include <unordered_set>
 #include <set>
+
+#include <regex>
+//msvc __cplusplus 199711l
+#ifdef __linux__
+#if __cplusplus >= 201103L &&                             \
+    (!defined(__GLIBCXX__) || (__cplusplus >= 201402L) || \
+        (defined(_GLIBCXX_REGEX_DFS_QUANTIFIERS_LIMIT) || \
+         defined(_GLIBCXX_REGEX_STATE_LIMIT)           || \
+             (defined(_GLIBCXX_RELEASE)                && \
+             _GLIBCXX_RELEASE > 4)))
+#define HAVE_WORKING_REGEX 1
+#else
+#define HAVE_WORKING_REGEX 0
+#endif
+#else
+#define HAVE_WORKING_REGEX 1
+#endif
 
 #define LOGERROR(fmt, ...)\
 	fprintf(stderr,"[ERROR] function:[%s] line:[%d]: " fmt "\n", __FUNCTION__, __LINE__, ##__VA_ARGS__)
@@ -130,6 +146,8 @@ void split_c(std::vector<StringRef>& ret, const std::string& s, const char delim
 	}
 }
 
+//If you want to use regular expressions your GCC version must be higher than 4.9
+//see https://stackoverflow.com/questions/12530406/is-gcc-4-8-or-earlier-buggy-about-regular-expressions
 bool isRegexMatch(std::string reg, std::string value) {
 	return std::regex_match(reg.begin(), reg.end(), std::regex(value));
 }
@@ -276,9 +294,13 @@ public:
 			// A variable may contain multiple field types
 			// may be [1,2,3,4],need add "pkg" keyword,If you don't want to save some unexpected value add "ex:number"
 			else if (data.find("pkg") != std::string::npos) {
-				type |= EVTYPE_REGEX;
+#if HAVE_WORKING_REGEX
+				type |= EVTYPE_REGEX;		
+#else
+				LOGERROR("you <regex> doesn't work");
+#endif
 			}
-			
+
 			//// split a|b 
 			//// This version will not be added
 			//if (data.find("sp") != std::string::npos) {
@@ -421,6 +443,7 @@ public:
 		Destory();
 	}
 
+	//To create a table structure object with a structure as its template, you pass in the path to the table and the split character
 	static StructValueConverter<StructType>* CreateTable(const char* file_name, const char d = '\t') {
 		StructValueConverter<StructType>* newConvert = new StructValueConverter<StructType>(file_name, d);
 		do {
@@ -437,30 +460,36 @@ public:
 		return newConvert;
 	}
 
+	//Export as  STL map/unordered_map  data structure
 	template<typename KeyType>
 	bool Unmarshal(std::unordered_map<KeyType, StructType>& save) {
 		return fast_parse(save);
 	}
 
+	//Export as  STL map/unordered_map  data structure,and support for lambda to check data easily
 	template<typename KeyType,typename _Pr>
 	bool Unmarshal(std::unordered_map<KeyType, StructType>& save, _Pr pr) {
 		return fast_parse(save, pr);
 	}
 
+	//Export as  STL map/unordered_map  data structure
 	template<typename KeyType>
 	bool Unmarshal(std::map<KeyType, StructType>& save) {
 		return fast_parse(save);
 	}
 
+	//Export as  STL map/unordered_map  data structure,and support for lambda to check data easily
 	template<typename KeyType, typename _Pr>
 	bool Unmarshal(std::map<KeyType, StructType>& save, _Pr pr) {
 		return fast_parse(save, pr);
 	}
 
+	//Export as  STL vector  data structure
 	bool Unmarshal(std::vector<StructType>& save) {
 		return fast_parse(save);
 	}
 
+	//Export as  STL vector  data structure,and support for lambda to check data easily
 	template<typename _Pr>
 	bool Unmarshal(std::vector<StructType>& save, _Pr pr) {
 		return fast_parse(save, pr);
@@ -471,24 +500,28 @@ public:
 	stl Support vector set
 	nonsupport char*
 	*/
+	//Register a store of the underlying type
 	template <typename FieldType>
 	void Register(FieldType StructType::* field_pointer,
 		std::string bind_field) {
 		newPointer(field_pointer, bind_field);
 	}
 
+	//Register a store for std::vector,
 	template <typename FieldType>
 	void Register(std::vector<FieldType> StructType::* field_pointer,
 		std::string bind_field) {
 		newPointer(field_pointer, bind_field);
 	}
 
+	//Register a store for std::set/unordered_set,
 	template <typename FieldType>
 	void Register(std::set<FieldType> StructType::* field_pointer,
 		std::string bind_field) {
 		newPointer(field_pointer, bind_field);
 	}
 
+	//Register a store for std::set/unordered_set,
 	template <typename FieldType>
 	void Register(std::unordered_set<FieldType> StructType::* field_pointer,
 		std::string bind_field) {
