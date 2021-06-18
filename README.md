@@ -111,6 +111,8 @@ bool Unmarshal(std::vector<StructType>& save, _Pr pr);
 
 # 4.Generated Game Config Tool
 
+If you want to expand or trim some fields, you can use the GneratedTool tool
+
 ```
 go build -o tools
 ./tools
