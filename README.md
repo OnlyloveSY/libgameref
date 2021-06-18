@@ -101,7 +101,7 @@ bool Unmarshal(std::vector<StructType>& save, _Pr pr);
 
 ### Unmarshal Support
 
-| stl                | *test support* |
+| c++ stl            | *test support* |
 | ------------------ | -------------- |
 | std::vector        | &#10004;       |
 | std::unordered_map | &#10004;       |
