@@ -1,6 +1,6 @@
 # 1.Guide
 
-Head Only C ++ - based game server or client is an efficient table reading tool, he static reflection to the structure of the various fields
+Head Only C ++ - based game server or client is an efficient table reading tool, Reflect table data into the structure
 
 - See the test case in (test) for details on how to use it
 
