@@ -1,6 +1,8 @@
 # 1.Guide
 
 EN:Head Only C ++ - based game server or client is an efficient table reading tool, Reflect table data into the structure
+
+
 CN:跨平台适用于游戏服务器,自动将以\t进行分割的数据表高效反射到对应标记的结构体成员中,他仅仅包含下面两个文件,并且没有其他任何依赖,具体如何使用请查看test文件夹中的测试用例,其中包含大量数据的表作为耗时参考
 
 - See the test case in (test) for details on how to use it
